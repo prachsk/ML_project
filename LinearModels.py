@@ -18,6 +18,12 @@ class LinearRegression:
         return np.dot(X, self.weights) + self.bias
         
     def fit(self, X:np.ndarray, y:np.ndarray):
+        """Fit the Linear Regression model to the training data.
+
+        Args:
+            X (np.ndarray): The training data with predictors.
+            y (np.ndarray): The target values.
+        """
         obs, vars = X.shape
 
         # Initialize Weights and Bias
@@ -60,6 +66,12 @@ class LogisticRegression:
         return (self._sigmoid(np.dot(X, self.weights) + self.bias) > self.threshold).astype(int)
     
     def fit(self, X:np.ndarray, y:np.ndarray):
+        """Fit the Logistic Regression model to the training data.
+
+        Args:
+            X (np.ndarray): The training data with predictors.
+            y (np.ndarray): The target values.
+        """
         obs, vars = X.shape
         self.weights = np.zeros(vars)
         self.bias = 0
