@@ -34,10 +34,9 @@ class ANN(nn.Module):
         out = self.l3(out)
         
         if self.problem == 'classification' and self.output_size == 1:
-            out = torch.sigmoid(out) # activation function
-            
+            out = torch.sigmoid(out, dim=1)
         elif self.problem == 'classification' and self.output_size > 1:
-            out = torch.softmax(out)
+            out = torch.softmax(out, dim=1)
 
         return out
     
@@ -57,9 +56,11 @@ class ANN(nn.Module):
         self.lr = lr
         self.loss = []
         
-        if self.problem == 'classification':
+        if self.problem == 'classification' and self.output_size == 1:
             criterion = nn.BCELoss()
-        else:
+        elif self.problem == 'classification' and self.output_size > 1:
+            criterion = nn.CrossEntropyLoss()
+        else :
             criterion = nn.MSELoss()
             
         optimizer = torch.optim.SGD(self.parameters(), lr=self.lr)
@@ -67,6 +68,8 @@ class ANN(nn.Module):
         for epoch in range(self.max_iter):
             # Forward pass
             outputs = self.forward(X)
+            if self.problem == 'classification' and self.output_size > 1:
+                y = y.long()
             loss = criterion(outputs, y)
 
             # Backward and optimize
@@ -194,6 +197,7 @@ class UNet(nn.Module):
         self.maxpool = nn.MaxPool2d(2, 2)
         self.upsample = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
         self.relu = nn.ReLU()
+        self.to(self.device)
         
     def forward(self, x):
         out = self.relu(self.conv1(x))
