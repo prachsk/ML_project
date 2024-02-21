@@ -41,7 +41,8 @@ class ANN(nn.Module):
         return out
     
     def predict(self, X):
-        return self.forward(X)
+        with torch.no_grad():
+            return self.forward(X)
     
     def fit(self, X, y, max_iter:int = 1000, lr:float = 0.01):
         """Fit the ANN model to the training data.
@@ -127,7 +128,8 @@ class CNN(nn.Module):
         return out
     
     def predict(self, X):
-        return self.forward(X)
+        with torch.no_grad():
+            return self.forward(X)
     
     def fit(self, train_loader, max_iter:int = 1000, lr:float = 0.01, momentum:float = 0.9, weight_decay:float = 0.005):
         """Fit the CNN model to the training data. The training data should be in the form of a DataLoader object.
@@ -247,7 +249,8 @@ class UNet(nn.Module):
         return out
     
     def predict(self, X):
-        return self.forward(X)
+        with torch.no_grad():
+            return self.forward(X)
     
     def fit(self, X, y, max_iter:int = 1000, lr:float = 0.01, weight_decay:float = 0.005):
         """Fit the UNet model to the training data.
